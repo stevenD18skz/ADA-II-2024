@@ -52,8 +52,6 @@ def escenario(org):
         print(f"{z.obtenerId()}", end=", ")
       print("]")
 
-
-
 escenario(colombia_sport)
 print("\n******************************************\n")
 colombia_sport.ordenarSedes()
@@ -65,54 +63,58 @@ escenario(colombia_sport)
 
 
 all_jugadores = colombia_sport.obtenerTodosJugadores()
-
-
-
 rankingJugadores = merge_sort(all_jugadores, ["Rendimiento", "Edad"])
 rankingJugadoresIds = list(map(lambda j: j.obtenerId(), rankingJugadores))
 edadJugadores = merge_sort(all_jugadores, ["Edad"])
-
-
-
-promedio_edad_jugadores = promedio(all_jugadores, "Edad")
-promedio_rendimiento_jugadores = promedio(all_jugadores, "Rendimiento")
-
-
-
 all_equipos = colombia_sport.obtenerTodosLosEquipos()
 rankingEquipos = merge_sort(all_equipos, ["Promedio", "NumeroJugadores"])
 
 
+
+
+equipo_mejor_rendimiento       = rankingEquipos[len(rankingEquipos) - 1].obtenerNombre()
+equipo_menor_rendimiento       = rankingEquipos[0].obtenerNombre()
+jugador_mejor_rendimiento      = rankingJugadores[len(rankingJugadores) - 1]
+jugador_menor_rendimiento      = rankingJugadores[0]
+jugador_mas_joven              = edadJugadores[0]
+jugador_con_mas_edad           = edadJugadores[len(edadJugadores) - 1]
+promedio_edad_jugadores        = promedio(all_jugadores, "Edad")
+promedio_rendimiento_jugadores = promedio(all_jugadores, "Rendimiento")
 print(
   "\n",
   f"Ranking Jugadores: {rankingJugadoresIds}\n\n",
-  f"Equipo con mayor rendimiento: {rankingEquipos[len(rankingEquipos) - 1].obtenerNombre()}\n",
-  f"Equipo con menor rendimiento: {rankingEquipos[0].obtenerNombre()}\n",
-  f"Jugador con mayor rendimiento: {rankingJugadores[len(rankingJugadores) - 1]}\n",
-  f"Jugador con menor rendimiento: {rankingJugadores[0]}\n",
-  f"Jugador mas joven: {edadJugadores[0]}\n",
-  f"Jugador mas cucho: {edadJugadores[len(edadJugadores) - 1]}\n",
+  f"Equipo con mayor rendimiento:  {equipo_mejor_rendimiento}\n",
+  f"Equipo con menor rendimiento:  {equipo_menor_rendimiento}\n",
+  f"Jugador con mayor rendimiento: {jugador_mejor_rendimiento}\n",
+  f"Jugador con menor rendimiento: {jugador_menor_rendimiento}\n",
+  f"Jugador mas joven: {jugador_mas_joven}\n",
+  f"Jugador mas cucho: {jugador_con_mas_edad}\n",
   f"Promedio de edad de los jugadores: {promedio_edad_jugadores}\n",
   f"Promedio del rendimiento de los jugadores: {promedio_rendimiento_jugadores}\n",
 )
 
 
 
-#     & C:/Users/braya/AppData/Local/Programs/Python/Python312/python.exe c:/Users/braya/Desktop/ADA/solucion.py
 
 
 
+
+
+
+
+
+
+"""
+& C:/Users/braya/AppData/Local/Programs/Python/Python312/python.exe c:/Users/braya/Desktop/ADA/solucion.py
 #print(list(map(lambda x: x*x, [1,2,3,4])))
 #lista_equipos_cali = [e1]
 #print(  list(sum(list(x.obtenerRendimiento() for x in y)) / len(y) for y in lista_equipos_cali)   )
 #cali_futbol.ordenarJugadores()
 #print([x.obtenerId() for x in cali_futbol.jugadores])
-
-
 #sede_cali.odenarEquiposPorPuntaje()
 #print("xxx")
 #print([x.obtenerNombre() for x in sede_cali.equipos])
-
 #print(jugador1)
 #print(cali_futbol)
 #print(sede_cali)
+"""

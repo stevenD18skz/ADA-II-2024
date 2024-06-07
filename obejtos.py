@@ -49,6 +49,20 @@ def promedio(lista, criterio):
 
 
 
+def combinar_listas(lista):
+      lista_combinada = []
+
+      for elemento in lista:
+        for subElemento in elemento:
+          lista_combinada.append(subElemento)
+
+      return lista_combinada
+
+
+
+
+
+
 class Jugador:
   # Atributos
   id = 0
@@ -86,16 +100,17 @@ class Jugador:
 
 
 
+
 class Equipo:
+  # Atributos
+  nombre = ""
+  jugadores = ""
+  
+
+  # Constructor (método __init__)
   def __init__(self, nombre, jugadores):
     self.nombre = nombre
     self.jugadores = jugadores
-  
-  def __str__(self):
-    return f"{self.nombre}: {list(x.obtenerId() for x in self.jugadores)}"
-  
-  def __repr__(self):
-    return self.__str__()
   
   def obtenerNombre(self):
     return self.nombre
@@ -104,19 +119,30 @@ class Equipo:
     return len(self.jugadores)
 
   def obtenerPromedio(self):
-      return promedio(self.jugadores, "Promedio")
+    return promedio(self.jugadores, "Rendimiento")
 
   def ordenarJugadores(self):
     self.jugadores = merge_sort(self.jugadores, ["Rendimiento", "Edad"])
 
+  def __str__(self):
+    return f"{self.nombre}: {list(x.obtenerId() for x in self.jugadores)}"
+  
+  def __repr__(self):
+    return self.__str__()
+
+
+
 
 
 class Sede:
+  nombre = ""
+  equipos = ""
+
+
   def __init__(self, nombreSede, equipos):
     self.nombre = nombreSede
     self.equipos = equipos
   
-
   def obtenerNombre(self):
     return self.nombre
   
@@ -133,6 +159,10 @@ class Sede:
 
 
 class Organizacion:
+  nombre = ""
+  sedes = ""
+
+
   def __init__(self, nombreI, sedesI):
     self.nombre = nombreI
     self.sedes = sedesI
@@ -144,27 +174,9 @@ class Organizacion:
     return self.sedes
   
   def obtenerTodosJugadores(self):
-    def combinar_listas(lista):
-      lista_combinada = []
-
-      for elemento in lista:
-        for subElemento in elemento:
-          lista_combinada.append(subElemento)
-
-      return lista_combinada
-
     return combinar_listas(list(equipo.jugadores for equipo in combinar_listas(list(sede.equipos for sede in self.sedes))))
 
   def obtenerTodosLosEquipos(self):
-    def combinar_listas(lista):
-      lista_combinada = []
-
-      for elemento in lista:
-        for subElemento in elemento:
-          lista_combinada.append(subElemento)
-
-      return lista_combinada
-    
     return combinar_listas(list(sede.equipos for sede in self.sedes))
   
   def ordenarSedes(self):
