@@ -62,16 +62,16 @@ escenario(colombia_sport)
 
 
 
-all_jugadores = colombia_sport.obtenerTodosJugadores()
+all_jugadores    = colombia_sport.obtenerTodosJugadores()
 rankingJugadores = merge_sort(all_jugadores, ["Rendimiento", "Edad"])
-rankingJugadoresIds = list(map(lambda j: j.obtenerId(), rankingJugadores))
-edadJugadores = merge_sort(all_jugadores, ["Edad"])
-all_equipos = colombia_sport.obtenerTodosLosEquipos()
+edadJugadores    = merge_sort(all_jugadores, ["Edad"])
+
+all_equipos    = colombia_sport.obtenerTodosLosEquipos()
 rankingEquipos = merge_sort(all_equipos, ["Promedio", "NumeroJugadores"])
 
 
 
-
+rankingJugadoresIds            = list(map(lambda j: j.obtenerId(), rankingJugadores))
 equipo_mejor_rendimiento       = rankingEquipos[len(rankingEquipos) - 1].obtenerNombre()
 equipo_menor_rendimiento       = rankingEquipos[0].obtenerNombre()
 jugador_mejor_rendimiento      = rankingJugadores[len(rankingJugadores) - 1]

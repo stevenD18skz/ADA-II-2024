@@ -114,6 +114,9 @@ class Equipo:
   
   def obtenerNombre(self):
     return self.nombre
+  
+  def obtenerJugadores(self):
+    return self.jugadores
 
   def obtenerNumeroJugadores(self):
     return len(self.jugadores)
@@ -147,10 +150,33 @@ class Sede:
     return self.nombre
   
   def obtenerPromedio(self):
-    return sum(list(x.obtenerPromedio() for x in self.equipos)) / len(self.equipos)
+    print(sum(list(equipo.obtenerPromedio() for equipo in self.equipos)) / len(self.equipos))
+    #en lugar de usar un for para iterar en la lista y sumar los elementos se hace uso de la funcion sum() que simula este comportamiento
+
+    print(promedio(self.equipos, "Promedio")) # => o(N)
+    #la funcion promedio implementada por nosotros mismo, en este caso se hace 1 una vez para los equipo y por cada equipo se hace una vez
+    #osea se o(n^2), en este caso es valido esta impelentacion con funcion
+
+    c = 0
+    ce = 0
+    for equipo in self.equipos:
+      ce = 0
+      for jugador in equipo.obtenerJugadores():
+        ce += jugador.obtenerRendimiento()
+      c += ce/equipo.obtenerNumeroJugadores()
+    promediof = c/len(self.equipos)
+    print(promediof)
+    #en este caso el codigo es mas ilustrativo, hacinedo mas evidente el analisis de complejidad, donde se evidencia el uso de cada for
+
+
+
+
+
+
+    return sum(list(equipo.obtenerPromedio() for equipo in self.equipos)) / len(self.equipos)
 
   def obtenerNumeroJugadores(self):
-    return sum(list(x.obtenerNumeroJugadores() for x in self.equipos))
+    return sum(list(equipo.obtenerNumeroJugadores() for equipo in self.equipos))
     
   def ordenarEquipos(self):
     self.equipos = merge_sort(self.equipos, ["Promedio", "NumeroJugadores"])[::-1]
@@ -184,8 +210,4 @@ class Organizacion:
     list(map(lambda se: se.ordenarEquipos(), self.sedes))
     list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
 
-    
-
-
-
-
+  
