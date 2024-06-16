@@ -162,7 +162,7 @@ class RedBlackTree:
 
             #node.data.arbol.print_tree(node.data.arbol.root)
             if isinstance(node.data, Sede):
-                print(f"\n Sede {node.data.obtenerNombre()}, Rendimiento: {node.data.obtenerPromedio()}")
+                print(f"\n Sede {node.data.obtenerNombre()}, Rendimiento: {node.data.obtenerSumatoria()}")
                 node.data.arbol.INORDER_TREE_WALK_escenario(node.data.arbol.root)
 
             elif isinstance(node.data, Equipo):
@@ -221,6 +221,25 @@ class RedBlackTree:
         if count == 0:
             return 0  # To handle the case where the tree is empty
         return total_sum / count
+    
+
+    def TREE_WALK_SUM(self, node, action):
+        if node != self.NIL:
+            self.TREE_WALK_SUM(node.left, action)
+            action(node)
+            self.TREE_WALK_SUM(node.right, action)
+
+    def TREE_SUM(self, criterio):
+        total_sum = 0
+
+        def action(node):
+            nonlocal total_sum
+            total_sum += getattr(node.data, 'obtener' + criterio)()
+
+        self.TREE_WALK_SUM(self.root, action)
+
+
+        return total_sum
 
     
 
@@ -309,6 +328,7 @@ class Equipo:
     nombre = ""
     jugadores = ""
     arbol = ""
+    promedio = ""
     
 
     # Constructor (método __init__)
@@ -327,10 +347,11 @@ class Equipo:
         return self.arbol.node_count
 
     def obtenerPromedio(self):
-        return self.arbol.TREE_AVERAGE("Rendimiento")
+        return self.promedio
 
     def ordenarJugadores(self):
         self.arbol.create_tree(self.jugadores, "Rendimiento", "Edad")
+        self.promedio = self.arbol.TREE_AVERAGE("Rendimiento")
 
     def __str__(self):
         return f"{self.nombre} sede "
@@ -343,6 +364,7 @@ class Sede:
     nombre = ""
     equipos = ""
     arbol = ""
+    sumatoria = ""
 
 
     def __init__(self, nombreSede, equipos):
@@ -353,15 +375,15 @@ class Sede:
     def obtenerNombre(self):
         return self.nombre
     
-    def obtenerPromedio(self):
-        return self.arbol.TREE_AVERAGE("Promedio")
+    def obtenerSumatoria(self):
+        return self.sumatoria
 
     def obtenerNumeroJugadores(self):
-        #return sum(list(equipo.obtenerNumeroJugadores() for equipo in self.equipos))
         return self.arbol.node_count
         
     def ordenarEquipos(self):
         self.arbol.create_tree(self.equipos, "Promedio", "NumeroJugadores")
+        self.sumatoria = self.arbol.TREE_SUM("Promedio")
 
 
 
@@ -370,12 +392,16 @@ class Organizacion:
     nombre = ""
     sedes = ""
     arbol = ""
+    todosLosJugadores = ""
+    todosLosEquipos = ""
 
 
     def __init__(self, nombreI, sedesI):
         self.nombre = nombreI
         self.sedes = sedesI
         self.arbol = RedBlackTree()
+        self.todosLosJugadores = combinar_listas(list(equipo.jugadores for equipo in combinar_listas(list(sede.equipos for sede in self.sedes))))
+        self.todosLosEquipos = combinar_listas(list(sede.equipos for sede in self.sedes))
 
     def obtenerNombre(self):
         return self.nombre
@@ -384,12 +410,12 @@ class Organizacion:
         return self.sedes
     
     def obtenerTodosJugadores(self):
-        return combinar_listas(list(equipo.jugadores for equipo in combinar_listas(list(sede.equipos for sede in self.sedes))))
+        return self.todosLosJugadores
 
     def obtenerTodosLosEquipos(self):
-        return combinar_listas(list(sede.equipos for sede in self.sedes))
+        return self.todosLosEquipos
     
     def ordenarSedes(self):
         list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
         list(map(lambda se: se.ordenarEquipos(), self.sedes))
-        self.arbol.create_tree(self.sedes, "Promedio", "NumeroJugadores")
+        self.arbol.create_tree(self.sedes, "Sumatoria", "NumeroJugadores")
