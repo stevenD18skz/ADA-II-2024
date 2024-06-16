@@ -27,11 +27,9 @@ sede_medellin = Sede("Medellin", [medellin_futbol, medellin_voley])
 colombia_sport = Organizacion("Colombia Sport", [sede_cali, sede_medellin])
 
 
-
-
 def escenario(org):
   for i in org.sedes:
-    print(f"\n Sede {i.obtenerNombre()} , Rendimiento: {i.obtenerPromedio()}")
+    print(f"\n Sede {i.obtenerNombre()} , Rendimiento: {i.obtenerSumatoria()}")
     for x in i.equipos:
       print(f"  • {x.obtenerNombre()}, Rendimiento: {x.obtenerPromedio()} \n    [", end="")
       for z in x.jugadores:

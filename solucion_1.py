@@ -41,7 +41,7 @@ def merge_sort(lista, criterios):
 
 
 
-def promedio(lista, criterio):
+def promedio(lista, criterio):# => o(n)
   c = 0
   for i in lista:
     c+= getattr(i, 'obtener' + criterio)()
@@ -89,10 +89,8 @@ class Jugador:
   def obtenerRendimiento(self):
     return self.rendimiento
 
-
-
   def __str__(self):
-    return f"{'{'} id: {self.id}, {self.nombre}, Rendimiento: {self.rendimiento}, Edad: {self.edad} {'}'}"
+    return f"soy {self.nombre}"
     
   def __repr__(self):
     return self.__str__()
@@ -105,30 +103,34 @@ class Equipo:
   # Atributos
   nombre = ""
   jugadores = ""
+  promedio = ""
+  numeroDejugadores = ""
   
 
   # Constructor (método __init__)
   def __init__(self, nombre, jugadores):
     self.nombre = nombre
     self.jugadores = jugadores
+    self.promedio = promedio(jugadores, "Rendimiento")
+    self.numeroDejugadores = len(self.jugadores)
   
   def obtenerNombre(self):
     return self.nombre
   
   def obtenerJugadores(self):
     return self.jugadores
+  
+  def obtenerPromedio(self):
+    return self.promedio
 
   def obtenerNumeroJugadores(self):
-    return len(self.jugadores)
-
-  def obtenerPromedio(self):
-    return promedio(self.jugadores, "Rendimiento")
+    return self.numeroDejugadores
 
   def ordenarJugadores(self):
     self.jugadores = merge_sort(self.jugadores, ["Rendimiento", "Edad"])
 
   def __str__(self):
-    return f"{self.nombre}: {list(x.obtenerId() for x in self.jugadores)}"
+    return f"soy {self.nombre}"
   
   def __repr__(self):
     return self.__str__()
@@ -140,21 +142,28 @@ class Equipo:
 class Sede:
   nombre = ""
   equipos = ""
+  sumatoria = ""
+  numeroJugadores = ""
 
 
   def __init__(self, nombreSede, equipos):
     self.nombre = nombreSede
     self.equipos = equipos
+    self.sumatoria = sum(list(map(lambda x: x.obtenerPromedio(), equipos)))
+    self.numeroJugadores = sum(list(equipo.obtenerNumeroJugadores() for equipo in self.equipos))
   
   def obtenerNombre(self):
     return self.nombre
   
-  def obtenerPromedio(self):
-    return promedio(self.equipos, "Promedio")
+  def obtenerEquipos(self):
+    return self.equipos
+
+  def obtenerSumatoria(self):
+    return self.sumatoria
 
   def obtenerNumeroJugadores(self):
-    return sum(list(equipo.obtenerNumeroJugadores() for equipo in self.equipos))
-    
+    return self.numeroJugadores
+
   def ordenarEquipos(self):
     self.equipos = merge_sort(self.equipos, ["Promedio", "NumeroJugadores"])[::-1]
 
@@ -164,11 +173,15 @@ class Sede:
 class Organizacion:
   nombre = ""
   sedes = ""
+  todosLosJugadores = ""
+  todosLosEquipos = ""
 
 
   def __init__(self, nombreI, sedesI):
     self.nombre = nombreI
     self.sedes = sedesI
+    self.todosLosJugadores = combinar_listas(list(equipo.jugadores for equipo in combinar_listas(list(sede.equipos for sede in self.sedes))))
+    self.todosLosEquipos = combinar_listas(list(sede.equipos for sede in self.sedes))
 
   def obtenerNombre(self):
     return self.nombre
@@ -177,13 +190,13 @@ class Organizacion:
     return self.sedes
   
   def obtenerTodosJugadores(self):
-    return combinar_listas(list(equipo.jugadores for equipo in combinar_listas(list(sede.equipos for sede in self.sedes))))
+    return self.todosLosJugadores 
 
   def obtenerTodosLosEquipos(self):
-    return combinar_listas(list(sede.equipos for sede in self.sedes))
+    return self.todosLosEquipos
   
   def ordenarSedes(self):
-    self.sedes = merge_sort(self.sedes, ["Promedio", "NumeroJugadores"])[::-1]
+    self.sedes = merge_sort(self.sedes, ["Sumatoria", "NumeroJugadores"])[::-1]
     list(map(lambda se: se.ordenarEquipos(), self.sedes))
     list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
 
