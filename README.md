@@ -4,3 +4,6 @@ Se hace entrega de 1 archivo por solucion, "Solucion_1.py" donde el formato para
 
 ## como ejecutar
 para ejecutar el codigo simplemente de debe de abriri uno de los archivos "input" y ejecutarlo, ya este devolvera el escenario inicial y los datos al hacer el ordenamiento
+
+## nota
+junto al repostirori exste un archivo llamado "creacion.py", el cual fue creado para la creacion de los datos para las pruebas
