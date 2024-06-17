@@ -1,3 +1,5 @@
+import time
+
 def merge_sort(lista, criterios):
   if len(lista) <= 1:
     return lista
@@ -13,6 +15,7 @@ def merge_sort(lista, criterios):
     i = 0
     j = 0
     while i < len(izquierda) and j < len(derecha):
+      time.sleep(1)
       if getattr(izquierda[i], 'obtener' + criterios[0])() == getattr(derecha[j], 'obtener' + criterios[0])() and (len(criterios) > 1):
         if getattr(izquierda[i], 'obtener' + criterios[1])() > getattr(derecha[j], 'obtener' + criterios[1])():
           resultado.append(izquierda[i])
@@ -30,6 +33,7 @@ def merge_sort(lista, criterios):
           j += 1
 
     # Agregar los elementos restantes de la lista que no se han procesado
+    time.sleep(1)
     resultado += izquierda[i:]
     resultado += derecha[j:]
 
@@ -196,8 +200,39 @@ class Organizacion:
     return self.todosLosEquipos
   
   def ordenarSedes(self):
-    self.sedes = merge_sort(self.sedes, ["Sumatoria", "NumeroJugadores"])[::-1]
+    ########## Tiempo de ordenamiento general ########## 
+    """     
+    start_time = time.time()
+    self.sedes = merge_sort(self.sedes, ["Sumatoria", "NumeroJugadores"])[::-1] 
     list(map(lambda se: se.ordenarEquipos(), self.sedes))
     list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
 
-  
+    end_time = time.time()
+
+    elapsed_time = end_time - start_time
+    print(f"El tiempo de organizacion fue {elapsed_time} segundos")
+    """
+
+    ########## Tiempo de ordenamiento individual ########## 
+
+    start_time = time.time()
+    self.sedes = merge_sort(self.sedes, ["Sumatoria", "NumeroJugadores"])[::-1]
+    end_time = time.time()
+
+    elapsed_time = end_time - start_time
+    print(f"El tiempo de organizacion de sedes fue {elapsed_time} segundos")
+
+
+    start_time2 = time.time()
+    list(map(lambda se: se.ordenarEquipos(), self.sedes))
+    end_time2 = time.time()
+
+    elapsed_time2 = end_time2 - start_time2
+    print(f"El tiempo de organizacion de equipos fue {elapsed_time2} segundos")
+
+    start_time3 = time.time()
+    list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
+    end_time3 = time.time()
+
+    elapsed_time3 = end_time3 - start_time3
+    print(f"El tiempo de organizacion de jugadores fue {elapsed_time3} segundos")
