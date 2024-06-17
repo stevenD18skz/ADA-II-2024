@@ -44,8 +44,6 @@ escenario(colombia_sport)
 
 
 
-
-
 all_jugadores    = colombia_sport.obtenerTodosJugadores()
 rankingJugadores = merge_sort(all_jugadores, ["Rendimiento", "Edad"])
 edadJugadores    = merge_sort(all_jugadores, ["Edad"])
@@ -64,6 +62,8 @@ jugador_mas_joven              = edadJugadores[0]
 jugador_con_mas_edad           = edadJugadores[len(edadJugadores) - 1]
 promedio_edad_jugadores        = promedio(all_jugadores, "Edad")
 promedio_rendimiento_jugadores = promedio(all_jugadores, "Rendimiento")
+
+
 print(
   "\n",
   f"Ranking Jugadores: {rankingJugadoresIds}\n\n",
