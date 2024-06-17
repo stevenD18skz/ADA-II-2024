@@ -1,4 +1,4 @@
-from solucion_1 import Jugador, Equipo, Sede, Organizacion, merge_sort, promedio
+from solucion_1 import Jugador, Equipo, Sede, Organizacion, merge_sort, promedio, todo
 """
 CREACION DE DATOS
 """
@@ -296,8 +296,6 @@ e15.jugadores.extend([jugador231, jugador232, jugador233, jugador234, jugador235
 e16.jugadores.extend([jugador236, jugador237, jugador238, jugador239, jugador240])
 
 
-
-
 s1 = Sede("Cali", [e1,e2,e3,e10,e11])
 s2 = Sede("Medellin", [e7,e8,e9,e14,e15])
 s3 = Sede("Bogota", [e4,e5,e6,e12,e13])
@@ -306,59 +304,5 @@ s5 = Sede("Buga", [e22,e23,e24,e29,e30])
 s6 = Sede("Pereira", [e19,e20,e21,e27,e28])
 
 
-
 colombia_sport = Organizacion("Colombia Sport", [s1, s2, s3])
-
-
-
-
-
-def escenario(org):
-  for i in org.sedes:
-    print(f"\n Sede {i.obtenerNombre()} , Rendimiento: {i.obtenerSumatoria()}")
-    for x in i.equipos:
-      print(f"  • {x.obtenerNombre()}, Rendimiento: {x.obtenerPromedio()} \n    [", end="")
-      for z in x.jugadores:
-        print(f"{z.obtenerId()}", end=", ")
-      print("]")
-
-escenario(colombia_sport)
-print("\n******************************************\n")
-colombia_sport.ordenarSedes()
-print("\n******************************************\n")
-escenario(colombia_sport)
-
-
-all_jugadores    = colombia_sport.obtenerTodosJugadores()
-rankingJugadores = merge_sort(all_jugadores, ["Rendimiento", "Edad"])
-edadJugadores    = merge_sort(all_jugadores, ["Edad"])
-
-all_equipos    = colombia_sport.obtenerTodosLosEquipos()
-rankingEquipos = merge_sort(all_equipos, ["Promedio", "NumeroJugadores"])
-
-
-
-rankingJugadoresIds            = list(map(lambda j: j.obtenerId(), rankingJugadores))
-equipo_mejor_rendimiento       = rankingEquipos[len(rankingEquipos) - 1].obtenerNombre()
-equipo_menor_rendimiento       = rankingEquipos[0].obtenerNombre()
-jugador_mejor_rendimiento      = rankingJugadores[len(rankingJugadores) - 1]
-jugador_menor_rendimiento      = rankingJugadores[0]
-jugador_mas_joven              = edadJugadores[0]
-jugador_con_mas_edad           = edadJugadores[len(edadJugadores) - 1]
-promedio_edad_jugadores        = promedio(all_jugadores, "Edad")
-promedio_rendimiento_jugadores = promedio(all_jugadores, "Rendimiento")
-print(
-  "\n",
-  f"Ranking Jugadores: {rankingJugadoresIds}\n\n",
-  f"Equipo con mayor rendimiento:  {equipo_mejor_rendimiento}\n",
-  f"Equipo con menor rendimiento:  {equipo_menor_rendimiento}\n",
-  f"Jugador con mayor rendimiento: {jugador_mejor_rendimiento}\n",
-  f"Jugador con menor rendimiento: {jugador_menor_rendimiento}\n",
-  f"Jugador mas joven: {jugador_mas_joven}\n",
-  f"Jugador mas cucho: {jugador_con_mas_edad}\n",
-  f"Promedio de edad de los jugadores: {promedio_edad_jugadores}\n",
-  f"Promedio del rendimiento de los jugadores: {promedio_rendimiento_jugadores}\n",
-)
-
-
-
+todo(colombia_sport)

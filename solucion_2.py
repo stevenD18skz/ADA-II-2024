@@ -1,5 +1,7 @@
 import time
 
+
+
 def combinar_listas(lista):
       lista_combinada = []
 
@@ -35,8 +37,6 @@ class RedBlackTree:
         return self.node_count
 
     def insert(self, data, criterio1, criterio2 = ""):
-        #if data != jugador
-        #nodecount += data.arbol.nodecount
         if not isinstance(data, Jugador):
             self.node_count += data.arbol.node_count
         else:
@@ -46,12 +46,10 @@ class RedBlackTree:
         new_node.left = self.NIL
         new_node.right = self.NIL
 
-        #getattr(new_node.data, 'obtener' + criterio2)()
-
         parent = None
         current = self.root
-
         while current != self.NIL:
+            time.sleep(0.1)
             parent = current
             if getattr(new_node.data, 'obtener' + criterio1)() == getattr(current.data, 'obtener' + criterio1)() and criterio2 != "":
                 if getattr(new_node.data, 'obtener' + criterio2)() > getattr(current.data, 'obtener' + criterio2)():
@@ -274,8 +272,6 @@ class RedBlackTree:
         return self.__str__()
 
 
-# Ejemplo de uso
-
 
 
 
@@ -362,6 +358,9 @@ class Equipo:
         return self.__str__()
 
 
+
+
+
 class Sede:
     nombre = ""
     equipos = ""
@@ -389,7 +388,8 @@ class Sede:
 
 
 
-#colombia_sport = Organizacion("Colombia Sport", [sede_cali, sede_medellin])
+
+
 class Organizacion:
     nombre = ""
     sedes = ""
@@ -420,14 +420,93 @@ class Organizacion:
 
         ########## Tiempo de ordenamiento individual ########## 
     def ordenarSedes(self):
-
-        start_time3 = time.time()
+        start_time = time.time()
         list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
-        end_time3 = time.time()
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"El tiempo de organizacion de jugadores fue {elapsed_time} segundos")
 
-        elapsed_time3 = end_time3 - start_time3
-        print(f"El tiempo de organizacion de jugadores fue {elapsed_time3} segundos")
-
-        start_time2 = time.time()
+        start_time = time.time()
         list(map(lambda se: se.ordenarEquipos(), self.sedes))
-        self.arbol.create_tree(self.sedes, "Promedio", "NumeroJugadores")
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"El tiempo de organizacion de equipos fue {elapsed_time} segundos")
+
+        start_time = time.time()
+        self.arbol.create_tree(self.sedes, "Sumatoria", "NumeroJugadores")
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"El tiempo de organizacion de sedes fue {elapsed_time} segundos")
+
+
+
+
+
+def todo(organizacion):
+    def escenario():
+        for i in organizacion.sedes:
+            print(f"Sede {i.obtenerNombre()}:")
+            for j in i.equipos:
+                print(f"• {j.obtenerNombre()}: [", end="")
+                for k in j.jugadores:
+                    print(f"{k.obtenerId()}", end=", ")
+                print("]")
+
+    escenario()
+    print("\n******************************************\n")
+    organizacion.ordenarSedes()
+    print("\n******************************************\n")
+    organizacion.arbol.INORDER_TREE_WALK_escenario(organizacion.arbol.root)
+
+
+
+
+    all_jugadores    = organizacion.obtenerTodosJugadores()
+    rankingJugadores = RedBlackTree()
+    start_time = time.time()
+    rankingJugadores.create_tree(all_jugadores, "Rendimiento", "Edad")
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"El tiempo de organizacion de todos los jugadores por rendimietno fue {elapsed_time} segundos")
+
+    edadJugadores = RedBlackTree()
+    start_time = time.time()
+    edadJugadores.create_tree(all_jugadores, "Edad")
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"El tiempo de organizacion de todos los jugadores por edad fue {elapsed_time} segundos")
+
+
+    all_equipos    = organizacion.obtenerTodosLosEquipos()
+    rankingEquipos = RedBlackTree()
+    start_time = time.time()
+    rankingEquipos.create_tree(all_equipos, "Promedio", "NumeroJugadores")
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"El tiempo de organizacion de todas las sedes por suma de rendimientos fue {elapsed_time} segundos")
+
+
+
+
+    rankingJugadoresIds            = rankingJugadores.TREE_SPECIFIC("Id")
+    equipo_mejor_rendimiento       = rankingEquipos.tree_maximum()
+    equipo_menor_rendimiento       = rankingEquipos.tree_minimum()
+    jugador_mejor_rendimiento      = rankingJugadores.tree_maximum().mostrarInformacion(["Id", "Nombre", "Rendimiento"])
+    jugador_menor_rendimiento      = rankingJugadores.tree_minimum().mostrarInformacion(["Id", "Nombre", "Rendimiento"])
+    jugador_mas_joven              = edadJugadores.tree_minimum().mostrarInformacion(["Id", "Nombre", "Edad"])
+    jugador_con_mas_edad           = edadJugadores.tree_maximum().mostrarInformacion(["Id", "Nombre", "Edad"])
+    promedio_edad_jugadores        = edadJugadores.TREE_AVERAGE("Edad")
+    promedio_rendimiento_jugadores = rankingJugadores.TREE_AVERAGE("Rendimiento")
+
+    print(
+        "\n",
+        f"Ranking Jugadores: {rankingJugadoresIds}\n\n",
+        f"Equipo con mayor rendimiento:  {equipo_mejor_rendimiento}\n",
+        f"Equipo con menor rendimiento:  {equipo_menor_rendimiento}\n",
+        f"Jugador con mayor rendimiento: {jugador_mejor_rendimiento}\n",
+        f"Jugador con menor rendimiento: {jugador_menor_rendimiento}\n",
+        f"Jugador mas joven: {jugador_mas_joven}\n",
+        f"Jugador mas cucho: {jugador_con_mas_edad}\n",
+        f"Promedio de edad de los jugadores: {promedio_edad_jugadores}\n",
+        f"Promedio del rendimiento de los jugadores: {promedio_rendimiento_jugadores}\n",
+    )

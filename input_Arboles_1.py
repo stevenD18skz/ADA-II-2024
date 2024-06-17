@@ -1,4 +1,4 @@
-from solucion_2 import Jugador, Equipo, Sede, Organizacion, RedBlackTree
+from solucion_2 import Jugador, Equipo, Sede, Organizacion, RedBlackTree, todo
 """
 CREACION DE DATOS
 """
@@ -25,61 +25,4 @@ sede_medellin = Sede("Medellin", [medellin_futbol, medellin_voley])
 
 
 colombia_sport = Organizacion("Colombia Sport", [sede_cali, sede_medellin])
-
-
-
-
-def escenario(org):
-    for i in org.sedes:
-        print(f"Sede {i.obtenerNombre()}:")
-        for j in i.equipos:
-            print(f"• {j.obtenerNombre()}: [", end="")
-            for k in j.jugadores:
-                print(f"{k.obtenerId()}", end=", ")
-            print("]")
-
-escenario(colombia_sport)
-print("\n******************************************\n")
-colombia_sport.ordenarSedes()
-print("\n******************************************\n")
-colombia_sport.arbol.INORDER_TREE_WALK_escenario(colombia_sport.arbol.root)
-
-
-
-
-all_jugadores    = colombia_sport.obtenerTodosJugadores()
-rankingJugadores = RedBlackTree()
-rankingJugadores.create_tree(all_jugadores, "Rendimiento", "Edad")
-
-edadJugadores = RedBlackTree()
-edadJugadores.create_tree(all_jugadores, "Edad")
-
-
-all_equipos    = colombia_sport.obtenerTodosLosEquipos()
-rankingEquipos = RedBlackTree()
-rankingEquipos.create_tree(all_equipos, "Promedio", "NumeroJugadores")
-
-
-
-rankingJugadoresIds            = rankingJugadores.TREE_SPECIFIC("Id")
-equipo_mejor_rendimiento       = rankingEquipos.tree_maximum()
-equipo_menor_rendimiento       = rankingEquipos.tree_minimum()
-jugador_mejor_rendimiento      = rankingJugadores.tree_maximum().mostrarInformacion(["Id", "Nombre", "Rendimiento"])
-jugador_menor_rendimiento      = rankingJugadores.tree_minimum().mostrarInformacion(["Id", "Nombre", "Rendimiento"])
-jugador_mas_joven              = edadJugadores.tree_minimum().mostrarInformacion(["Id", "Nombre", "Edad"])
-jugador_con_mas_edad           = edadJugadores.tree_maximum().mostrarInformacion(["Id", "Nombre", "Edad"])
-promedio_edad_jugadores        = edadJugadores.TREE_AVERAGE("Edad")
-promedio_rendimiento_jugadores = rankingJugadores.TREE_AVERAGE("Rendimiento")
-
-print(
-    "\n",
-    f"Ranking Jugadores: {rankingJugadoresIds}\n\n",
-    f"Equipo con mayor rendimiento:  {equipo_mejor_rendimiento}\n",
-    f"Equipo con menor rendimiento:  {equipo_menor_rendimiento}\n",
-    f"Jugador con mayor rendimiento: {jugador_mejor_rendimiento}\n",
-    f"Jugador con menor rendimiento: {jugador_menor_rendimiento}\n",
-    f"Jugador mas joven: {jugador_mas_joven}\n",
-    f"Jugador mas cucho: {jugador_con_mas_edad}\n",
-    f"Promedio de edad de los jugadores: {promedio_edad_jugadores}\n",
-    f"Promedio del rendimiento de los jugadores: {promedio_rendimiento_jugadores}\n",
-)
+todo(colombia_sport)
