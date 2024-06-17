@@ -17,7 +17,7 @@ def merge_sort(lista, criterios):
     i = 0
     j = 0
     while i < len(izquierda) and j < len(derecha):
-      time.sleep(0.1)
+      #time.sleep(0.1)
       if getattr(izquierda[i], 'obtener' + criterios[0])() == getattr(derecha[j], 'obtener' + criterios[0])() and (len(criterios) > 1):
         if getattr(izquierda[i], 'obtener' + criterios[1])() > getattr(derecha[j], 'obtener' + criterios[1])():
           resultado.append(izquierda[i])
