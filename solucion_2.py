@@ -1,3 +1,5 @@
+import time
+
 def combinar_listas(lista):
       lista_combinada = []
 
@@ -415,7 +417,17 @@ class Organizacion:
     def obtenerTodosLosEquipos(self):
         return self.todosLosEquipos
     
+
+        ########## Tiempo de ordenamiento individual ########## 
     def ordenarSedes(self):
+
+        start_time3 = time.time()
         list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
+        end_time3 = time.time()
+
+        elapsed_time3 = end_time3 - start_time3
+        print(f"El tiempo de organizacion de jugadores fue {elapsed_time3} segundos")
+
+        start_time2 = time.time()
         list(map(lambda se: se.ordenarEquipos(), self.sedes))
-        self.arbol.create_tree(self.sedes, "Sumatoria", "NumeroJugadores")
+        self.arbol.create_tree(self.sedes, "Promedio", "NumeroJugadores")
