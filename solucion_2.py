@@ -453,14 +453,15 @@ def todo(organizacion):
                 print("]")
 
     escenario()
-    print("\n******************************************\n")
+    print("\n\n******************************************")
     organizacion.ordenarSedes()
-    print("\n******************************************\n")
+    print("******************************************\n\n")
     organizacion.arbol.INORDER_TREE_WALK_escenario(organizacion.arbol.root)
 
 
 
 
+    print("\n\n******************************************")
     all_jugadores    = organizacion.obtenerTodosJugadores()
     rankingJugadores = RedBlackTree()
     start_time = time.time()
@@ -484,6 +485,7 @@ def todo(organizacion):
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"El tiempo de organizacion de todas las sedes por suma de rendimientos fue {elapsed_time} segundos")
+    print("******************************************\n\n")
 
 
 

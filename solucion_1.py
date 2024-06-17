@@ -257,13 +257,13 @@ def todo(organizacion):
         print("]")
 
   escenario()
-  print("\n******************************************\n")
+  print("\n\n******************************************")
   organizacion.ordenarSedes()
-  print("\n******************************************\n")
+  print("******************************************\n\n")
   escenario()
 
 
-
+  print("\n\n******************************************")
   all_jugadores = organizacion.obtenerTodosJugadores()
 
   start_time = time.time()
@@ -284,6 +284,7 @@ def todo(organizacion):
   end_time = time.time()
   elapsed_time = end_time - start_time
   print(f"El tiempo de organizacion de todas las sedes {elapsed_time} segundos")
+  print("******************************************\n\n")
 
 
 
