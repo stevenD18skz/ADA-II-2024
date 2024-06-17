@@ -49,7 +49,7 @@ class RedBlackTree:
         parent = None
         current = self.root
         while current != self.NIL:
-            time.sleep(0.1)
+            time.sleep(0)
             parent = current
             if getattr(new_node.data, 'obtener' + criterio1)() == getattr(current.data, 'obtener' + criterio1)() and criterio2 != "":
                 if getattr(new_node.data, 'obtener' + criterio2)() > getattr(current.data, 'obtener' + criterio2)():
