@@ -207,7 +207,6 @@ class Organizacion:
   
   def ordenarSedes(self):
     ########## Tiempo de ordenamiento general ########## 
-    """     
     start_time = time.time()
     self.sedes = merge_sort(self.sedes, ["Sumatoria", "NumeroJugadores"])[::-1] 
     list(map(lambda se: se.ordenarEquipos(), self.sedes))
@@ -217,31 +216,6 @@ class Organizacion:
 
     elapsed_time = end_time - start_time
     print(f"El tiempo de organizacion fue {elapsed_time} segundos")
-    """
-
-    ########## Tiempo de ordenamiento individual ########## 
-    start_time = time.time()
-    self.sedes = merge_sort(self.sedes, ["Sumatoria", "NumeroJugadores"])[::-1]
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print(f"El tiempo de organizacion de sedes fue {elapsed_time} segundos")
-
-
-
-    start_time2 = time.time()
-    list(map(lambda se: se.ordenarEquipos(), self.sedes))
-    end_time2 = time.time()
-    elapsed_time2 = end_time2 - start_time2
-    print(f"El tiempo de organizacion de equipos fue {elapsed_time2} segundos")
-
-
-
-    start_time3 = time.time()
-    list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
-    end_time3 = time.time()
-    elapsed_time3 = end_time3 - start_time3
-    print(f"El tiempo de organizacion de jugadores fue {elapsed_time3} segundos")
-
 
 
 
@@ -286,8 +260,6 @@ def todo(organizacion):
   print(f"El tiempo de organizacion de todas las sedes {elapsed_time} segundos")
   print("******************************************\n\n")
 
-
-
   rankingJugadoresIds            = list(map(lambda j: j.obtenerId(), rankingJugadores))
   equipo_mejor_rendimiento       = rankingEquipos[len(rankingEquipos) - 1].obtenerNombre()
   equipo_menor_rendimiento       = rankingEquipos[0].obtenerNombre()
@@ -297,7 +269,6 @@ def todo(organizacion):
   jugador_con_mas_edad           = edadJugadores[len(edadJugadores) - 1].mostrarInformacion(["Id", "Nombre", "Edad"])
   promedio_edad_jugadores        = promedio(all_jugadores, "Edad")
   promedio_rendimiento_jugadores = promedio(all_jugadores, "Rendimiento")
-
 
   print(
     "\n",

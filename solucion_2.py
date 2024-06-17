@@ -421,19 +421,12 @@ class Organizacion:
         ########## Tiempo de ordenamiento individual ########## 
     def ordenarSedes(self):
         start_time = time.time()
+
         list(map(lambda sedeMap: list(map(lambda eq: eq.ordenarJugadores(), sedeMap.equipos)), self.sedes))
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        print(f"El tiempo de organizacion de jugadores fue {elapsed_time} segundos")
-
-        start_time = time.time()
         list(map(lambda se: se.ordenarEquipos(), self.sedes))
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        print(f"El tiempo de organizacion de equipos fue {elapsed_time} segundos")
-
-        start_time = time.time()
         self.arbol.create_tree(self.sedes, "Sumatoria", "NumeroJugadores")
+
+        
         end_time = time.time()
         elapsed_time = end_time - start_time
         print(f"El tiempo de organizacion de sedes fue {elapsed_time} segundos")
