@@ -1,9 +1,12 @@
 import lector, math , copy
 
-n = lector.n_agentes
-agentes = lector.agentes
-R_max = lector.R_max
+
+n, agentes, R_max = lector.ALFile()
 Estrategias = []
+
+print(f'n: {n}')
+print(f'Parejas: {agentes}')
+print(f'Último número: {R_max}')
 
 def generarEstrategia(e, n):
     if n == 0:
