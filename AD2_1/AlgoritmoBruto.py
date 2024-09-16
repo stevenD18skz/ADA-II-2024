@@ -117,7 +117,7 @@ class RedSocialModeracion:
                     laPropiaEstrategia[1] = nuevoExtremismo
 
         laPropiaEstrategia[2] = self.calcularEsfuerzo(laPropiaEstrategia[0])
-        return laPropiaEstrategia
+        return laPropiaEstrategia #estrategia, extermismoResultannte, Exfuerzo
 
 
 

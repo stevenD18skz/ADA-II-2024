@@ -8,11 +8,13 @@ import time, timeit
 
 import lector
 from AlgoritmoBruto import *
+from AlgoritmoVoraz import *
 
 moderacion = None
+solucionVoraz = None
 
 def cargar_archivo():
-    global moderacion
+    global moderacion, solucionVoraz
     ruta_script = os.path.dirname(os.path.abspath(__file__))
     ruta_entradas = os.path.join(ruta_script, 'Entradas')
     
@@ -29,6 +31,7 @@ def cargar_archivo():
         
         n_agentes, agentes, R_max = lector.ALFile(ruta_archivo=file_path)
         moderacion = RedSocialModeracion(n_agentes, agentes, R_max)
+        solucionVoraz = RedSocialModeracionVoraz(n_agentes, agentes, R_max)
 
         return file_path
     
@@ -40,16 +43,30 @@ def cargar_archivo():
 
 
 
-def solucionar():
-    global moderacion
+def solucionar(eleccion):
+    global moderacion, solucionVoraz
+
+    diccionario_soluciones = {
+        1: moderacion.hallarMejorEstrategia,
+        2: solucionVoraz.algoritmo_voraz
+    }
+
+    diccionario_titulos = {
+        1: "BRUTA",
+        2: "VORAZ"
+    }
+
+
+
+
 
 
     estado_label.config(text="Cargando...")
     start_time = time.time()
-    solucion = moderacion.hallarMejorEstrategia()
+    solucion = diccionario_soluciones[eleccion]()
     end_time = time.time()
     elapsed_time = end_time - start_time
-    estado_label.config(text=f"Completado en {elapsed_time:.16f}")
+    estado_label.config(text=f"Completado, se ah usado la solucion {diccionario_titulos[eleccion]}, en {elapsed_time:.80f}")
 
     solucion_outPut = ""
     solucion_outPut += f'{solucion[1]}\n' #extremismo final de la red social arreglada
@@ -139,10 +156,29 @@ boton_cargar = CTkButton(master=frame, text="Cargar Archivo", corner_radius=10, 
                                    fg_color="#3498DB", hover_color="#2980B9")
 boton_cargar.grid(row=1, column=0, padx=10, pady=10)
 
-# Botón de "Solucionar" personalizado
-boton_solucionar = CTkButton(master=frame, text="Solucionar", corner_radius=10, command=solucionar, 
+# Botón de "Cargar Archivo" personalizado
+boton_cargar = CTkButton(master=frame, text="Cargar Archivo", corner_radius=10, command=cargar_archivo, 
+                                   fg_color="#3498DB", hover_color="#2980B9")
+boton_cargar.grid(row=1, column=0, padx=10, pady=10)
+
+# Botones de "Solucionar 1", "Solucionar 2" y "Solucionar 3"
+frame_botones = tk.Frame(frame, bg="#2C3E50")
+frame_botones.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
+
+# Botón Solucionar 1
+boton_solucionar1 = CTkButton(master=frame_botones, text="Solucionar 1", corner_radius=10, command=lambda: solucionar(1), 
                                        fg_color="#E74C3C", hover_color="#C0392B")
-boton_solucionar.grid(row=0, column=1, padx=10, pady=10)
+boton_solucionar1.pack(side="left", padx=5)
+
+# Botón Solucionar 2
+boton_solucionar2 = CTkButton(master=frame_botones, text="Solucionar 2", corner_radius=10, command=lambda: solucionar(2), 
+                                       fg_color="#E67E22", hover_color="#D35400")
+boton_solucionar2.pack(side="left", padx=5)
+
+# Botón Solucionar 3
+boton_solucionar3 = CTkButton(master=frame_botones, text="Solucionar 3", corner_radius=10, command=lambda: solucionar(3), 
+                                       fg_color="#1ABC9C", hover_color="#16A085")
+boton_solucionar3.pack(side="left", padx=5)
 
 # Área de texto para la salida (visualizar la solución)
 salida_texto = tk.Text(frame, height=20, width=30, wrap="word", bg="#ECF0F1", fg="#2C3E50", font=("Arial", 12))
