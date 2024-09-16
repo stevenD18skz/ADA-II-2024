@@ -1,160 +1,127 @@
-import lector, math , copy
+import  math , copy
 
+class RedSocialModeracion:
+    def __init__(self, n_agentes, agentes, R_max):
+        """
+        Inicializa una instancia de RedSocialModeracion.
 
-
-def generarEstrategias(n):
-    def generarEstrategia(e, n):
-        if n == 0:
-            return [e]
-        else:
-            e_0 = e.copy()
-            e_1 = e.copy()
-            e_0.append(0)
-            e_1.append(1)
-            return generarEstrategia(e_0, n-1) + generarEstrategia(e_1, n-1)
-
-    return generarEstrategia([], n)
-
-
-
-
-
-def calcularExtremismoRS(unosAgentes):
-    """
-    Calcula el nivel de extremismo de una red social.
-
-    El nivel de extremismo se define como la raíz cuadrada de la suma de los cuadrados
-    de las opiniones de los agentes, dividida entre el número total de agentes.
-
-    Args:
-        unosAgentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
+        Args:
+            agentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
                             oRS es la opinión del agente, y rRS es su receptividad.
+            R_max (int): El esfuerzo máximo permitido para la moderación.
+        """
+        self.n_agentes = n_agentes
+        self.agentes = agentes  # Lista de agentes con sus opiniones y receptividad
+        self.R_max = R_max  # Esfuerzo máximo permitido
+        self.n = len(agentes)  # Número de agentes
 
-    Returns:
-        float: El nivel de extremismo de la red social, calculado como la raíz cuadrada
-               de la suma de los cuadrados de las opiniones, dividido por el número de agentes.
-    """
-    suma = sum(list(map(lambda x: math.pow(x[0], 2), unosAgentes)))
-    raiz = math.pow(suma, 1/2)
-    return raiz / len(unosAgentes)
+    def generarEstrategias(self, n):
+        """
+        Genera todas las posibles estrategias de moderación.
+
+        Args:
+            n (int): Número de agentes.
+
+        Returns:
+            list: Lista de todas las posibles estrategias de moderación (listas binarias).
+        """
+        def generarEstrategia(e, n):
+            if n == 0:
+                return [e]
+            else:
+                e_0 = e.copy()
+                e_1 = e.copy()
+                e_0.append(0)
+                e_1.append(1)
+                return generarEstrategia(e_0, n-1) + generarEstrategia(e_1, n-1)
+
+        return generarEstrategia([], n)
+
+    def calcularExtremismoRS(self, unosAgentes):
+        """
+        Calcula el nivel de extremismo de una red social.
+
+        Args:
+            unosAgentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
+
+        Returns:
+            float: El nivel de extremismo de la red social.
+        """
+        suma = sum(list(map(lambda x: math.pow(x[0], 2), unosAgentes)))
+        raiz = math.pow(suma, 1/2)
+        return raiz / len(unosAgentes)
+
+    def calcularEsfuerzo(self, e):
+        """
+        Calcula el esfuerzo total de moderación para una estrategia.
+
+        Args:
+            e (list): Lista binaria que representa la estrategia de moderación.
+
+        Returns:
+            int: El esfuerzo total necesario para aplicar la estrategia.
+        """
+        esfuerzo = 0
+        for i in range(self.n):
+            if e[i] == 1:
+                opinion_i = abs(self.agentes[i][0])
+                receptividad_i = (1 - self.agentes[i][1])
+                esfuerzo += math.ceil(opinion_i * receptividad_i)
+        return esfuerzo
+
+    def generarNuevaRS(self, e):
+        """
+        Genera una nueva red social a partir de la red original aplicando una estrategia de moderación.
+
+        Args:
+            e (list): Lista binaria que representa la estrategia de moderación.
+
+        Returns:
+            list: Nueva lista de agentes, donde las opiniones de los agentes moderados han sido cambiadas a 0.
+        """
+        nuevosAgentes = copy.deepcopy(self.agentes)
+        for i in range(self.n):
+            if e[i] == 1:
+                nuevosAgentes[i][0] = 0
+        return nuevosAgentes
+
+    def esEstrategiaAplicable(self, e):
+        """
+        Verifica si una estrategia de moderación es aplicable.
+
+        Args:
+            e (list): Lista binaria que representa la estrategia de moderación.
+
+        Returns:
+            bool: True si la estrategia es aplicable, False en caso contrario.
+        """
+        esfuerzo = self.calcularEsfuerzo(e)
+        return esfuerzo <= self.R_max
+
+    def hallarMejorEstrategia(self):
+        """
+        Encuentra la mejor estrategia de moderación.
+
+        Returns:
+            tuple: La mejor estrategia y su nivel de extremismo.
+        """
+        unasEstrategias = self.generarEstrategias(self.n)
+        laPropiaEstrategia = [[], self.calcularExtremismoRS(self.agentes), 0]
+
+        for estrategia in unasEstrategias:
+            if self.esEstrategiaAplicable(estrategia):
+                nuevaRS = self.generarNuevaRS(estrategia)
+                nuevoExtremismo = self.calcularExtremismoRS(nuevaRS)
+                if nuevoExtremismo < laPropiaEstrategia[1]:
+                    laPropiaEstrategia[0] = estrategia
+                    laPropiaEstrategia[1] = nuevoExtremismo
+
+        laPropiaEstrategia[2] = self.calcularEsfuerzo(laPropiaEstrategia[0])
+        return laPropiaEstrategia
 
 
 
 
-
-def calcularEsfuerzo(unosAgentes, e):
-    """
-    Calcula el esfuerzo total de moderación para una red social dada una estrategia de moderación.
-
-    Args:
-        unosAgentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
-                            oRS es la opinión del agente, y rRS es su receptividad.
-        e (list): Lista binaria que representa la estrategia de moderación.
-                  Un valor de 1 en la posición i indica que el agente i será moderado,
-                  mientras que un valor de 0 indica que no lo será.
-
-    Returns:
-        int: Esfuerzo total necesario para aplicar la estrategia de moderación a la red social,
-             calculado como el producto entre la magnitud de la opinión del agente y su receptividad
-             restada de 1, redondeado hacia arriba.
-    """
-    esfuerzo = 0
-    for i in range(n):
-        if (e[i] == 1):
-            opinion_i = abs(unosAgentes[i][0])
-            receptividad_i = (1 - unosAgentes[i][1])
-            esfuerzo += math.ceil(opinion_i*receptividad_i)
-    return esfuerzo
-
-
-
-
-
-def generarNuevaRS(unosAgentes, e):
-    """
-    Genera una nueva red social a partir de la red original, aplicando una estrategia de moderación.
-
-    Los agentes cuya estrategia de moderación es 1 tendrán su opinión reducida a 0.
-
-    Args:
-        unosAgentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
-                            oRS es la opinión del agente, y rRS es su receptividad.
-        e (list): Lista binaria que representa la estrategia de moderación.
-                  Un valor de 1 en la posición i indica que el agente i será moderado,
-                  mientras que un valor de 0 indica que no lo será.
-
-    Returns:
-        list: Nueva lista de agentes, donde las opiniones de los agentes moderados
-              han sido cambiadas a 0.
-    """
-    nuevosAgentes = copy.deepcopy(unosAgentes)
-    for i in range(n):
-        if e[i] == 1:
-            nuevosAgentes[i][0] = 0
-    return nuevosAgentes
-
-
-
-
-
-def esEstrategiaAplicable(unosAgentes, e):
-    """
-    Verifica si una estrategia de moderación es aplicable a la red social.
-
-    La estrategia es aplicable si el esfuerzo total necesario para aplicarla es menor
-    o igual a un valor máximo de esfuerzo permitido (R_max).
-
-    Args:
-        unosAgentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
-                            oRS es la opinión del agente, y rRS es su receptividad.
-        e (list): Lista binaria que representa la estrategia de moderación.
-                  Un valor de 1 en la posición i indica que el agente i será moderado,
-                  mientras que un valor de 0 indica que no lo será.
-
-    Returns:
-        bool: True si la estrategia es aplicable (el esfuerzo es menor o igual a R_max),
-              False en caso contrario.
-    """
-    esfuerzo = calcularEsfuerzo(unosAgentes, e)
-    return (esfuerzo <= R_max) 
-
-
-
-
-
-def hallarMejorEstrategia(unosAgentes):
-    """
-    Encuentra la mejor estrategia de moderación entre una lista de estrategias aplicables.
-
-    La mejor estrategia es aquella que minimiza el nivel de extremismo de la red social,
-    siempre y cuando el esfuerzo para aplicarla sea menor o igual a R_max.
-
-    Args:
-        unasEstrategias (list): Lista de posibles estrategias de moderación.
-                                Cada estrategia es una lista binaria donde 1 indica que el
-                                agente será moderado y 0 que no lo será.
-        unosAgentes (list): Lista de agentes, donde cada agente es una tupla (oRS, rRS).
-                            oRS es la opinión del agente, y rRS es su receptividad.
-
-    Returns:
-        tuple: Una tupla que contiene la mejor estrategia (lista binaria) y su nivel de extremismo.
-               Si no se encuentra ninguna estrategia aplicable, retorna None.
-    """
-
-    unasEstrategias = generarEstrategias(len(unosAgentes))
-    laPropiaEstrategia = [[], calcularExtremismoRS(unosAgentes), 0]     # [estrategia , extremismo , esfuerzo]
-
-    for estrategia in unasEstrategias:
-        if esEstrategiaAplicable(unosAgentes, estrategia):
-            nuevaRS = generarNuevaRS(unosAgentes, estrategia)
-            nuevoExtremismo = calcularExtremismoRS(nuevaRS)
-            if nuevoExtremismo < laPropiaEstrategia[1]:
-                laPropiaEstrategia[0] = estrategia
-                laPropiaEstrategia[1] = nuevoExtremismo 
-    
-    laPropiaEstrategia[2] = calcularEsfuerzo(unosAgentes, laPropiaEstrategia[0])
-    
-    return laPropiaEstrategia
 
 
 

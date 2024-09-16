@@ -6,16 +6,15 @@ import os
 import lector
 from AlgoritmoBruto import *
 
-agentes = None
+moderacion = None
 
 # Función para cargar el archivo de texto con el problema
 def cargar_archivo():
-    global agentes  # Indica que vamos a modificar la variable global agentes
+    global moderacion  # Indica que vamos a modificar la variable global agentes
     archivo = filedialog.askopenfilename(
         title="Seleccionar archivo",
         filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*"))
     )
-    
     
     if archivo:
         with open(archivo, 'r') as f:
@@ -23,7 +22,7 @@ def cargar_archivo():
             entrada_texto.insert(tk.END, f.read())  # Cargar el contenido
         
         n_agentes, agentes, R_max = lector.ALFile(ruta_archivo=archivo)
-        print(n_agentes, agentes, R_max)
+        moderacion = RedSocialModeracion(n_agentes, agentes, R_max)
 
         return archivo
     
@@ -37,33 +36,58 @@ def cargar_archivo():
 
 # Función para procesar el problema y mostrar la solución
 def solucionar():
-    global agentes  # Indica que vamos a usar la variable global agentes
-    solucion = hallarMejorEstrategia(agentes)
+    global moderacion  # Indica que vamos a usar la variable global agentes
+    solucion = moderacion.hallarMejorEstrategia()
     print(solucion)
     print("="*80)
 
+
+    solucion_outPut = ""
+    solucion_outPut += f'{solucion[1]}\n' #extremismo
+    solucion_outPut += f'{solucion[2]}\n' #Exfuerzo
+    for x in solucion[0]:
+        solucion_outPut += f"{x}\n"
+
+
     # Mostrar la solución en el área de salida
     salida_texto.delete(1.0, tk.END)  # Limpiar el área de salida
-    salida_texto.insert(tk.END, solucion)
+    salida_texto.insert(tk.END, solucion_outPut)
+
+
 
     # Guardar la solución en un archivo de texto
-    guardar_solucion(solucion)
+    guardar_solucion(solucion_outPut)
 
 
 
 
-def guardar_solucion(solucion):
+def guardar_solucion(solucion_outPut):
+    with open('./AD2_1/salida.txt', 'w') as file:
+        file.write(solucion_outPut)
+
+
+    return None
     archivo_guardar = filedialog.asksaveasfilename(
         defaultextension=".txt",
         filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")),
         title="Guardar solución"
     )
+
     if archivo_guardar:
         with open(archivo_guardar, 'w') as f:
-            f.write(solucion)
+            f.write(solucion_outPut)
+
         messagebox.showinfo("Éxito", "Solución guardada correctamente.")
+        
+
+
+
     else:
         messagebox.showwarning("Advertencia", "No se seleccionó un archivo para guardar.")
+
+
+
+
 
 # Crear la ventana principal
 ventana = tk.Tk()
