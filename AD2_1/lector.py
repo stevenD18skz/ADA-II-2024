@@ -2,12 +2,14 @@ import os
 
 
 # Abrir y leer el archivo
-def ALFile(n = 1):
-    # Obtiene la ruta absoluta del directorio donde está el script
-    ruta_script = os.path.dirname(os.path.abspath(__file__))
+def ALFile(n = 1, ruta_archivo = ""):
 
-    # Construye la ruta completa del archivo Prueba1.txt
-    ruta_archivo = os.path.join(ruta_script, 'Entradas', f'Prueba{n}.txt')
+    if ruta_archivo == "":
+        # Obtiene la ruta absoluta del directorio donde está el script
+        ruta_script = os.path.dirname(os.path.abspath(__file__))
+
+        # Construye la ruta completa del archivo Prueba1.txt
+        ruta_archivo = os.path.join(ruta_script, 'Entradas', f'Prueba{n}.txt')
 
     with open(ruta_archivo, 'r') as archivo:
         # Leer la primera línea y convertirla a entero para obtener n
