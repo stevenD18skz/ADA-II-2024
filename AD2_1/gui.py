@@ -11,9 +11,8 @@ from AlgoritmoBruto import *
 
 moderacion = None
 
-# Función para cargar el archivo de texto con el problema
 def cargar_archivo():
-    global moderacion  # Indica que vamos a modificar la variable global agentes
+    global moderacion
     ruta_script = os.path.dirname(os.path.abspath(__file__))
     ruta_entradas = os.path.join(ruta_script, 'Entradas')
     
@@ -41,9 +40,8 @@ def cargar_archivo():
 
 
 
-# Función para procesar el problema y mostrar la solución
 def solucionar():
-    global moderacion  # Indica que vamos a usar la variable global agentes
+    global moderacion
 
 
     estado_label.config(text="Cargando...")
@@ -54,8 +52,8 @@ def solucionar():
     estado_label.config(text=f"Completado en {elapsed_time:.16f}")
 
     solucion_outPut = ""
-    solucion_outPut += f'{solucion[1]}\n' #extremismo
-    solucion_outPut += f'{solucion[2]}\n' #Exfuerzo
+    solucion_outPut += f'{solucion[1]}\n' #extremismo final de la red social arreglada
+    solucion_outPut += f'{solucion[2]}\n' #Exfuerzo para mejorar la red social
     for x in solucion[0]:
         solucion_outPut += f"{x}\n"
 
