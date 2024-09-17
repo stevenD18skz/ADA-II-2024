@@ -166,12 +166,12 @@ frame_botones = tk.Frame(frame, bg="#2C3E50")
 frame_botones.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
 
 # Botón Solucionar 1
-boton_solucionar1 = CTkButton(master=frame_botones, text="Solucionar 1", corner_radius=10, command=lambda: solucionar(1), 
+boton_solucionar1 = CTkButton(master=frame_botones, text="Solucion BRUTA", corner_radius=10, command=lambda: solucionar(1), 
                                        fg_color="#E74C3C", hover_color="#C0392B")
 boton_solucionar1.pack(side="left", padx=5)
 
 # Botón Solucionar 2
-boton_solucionar2 = CTkButton(master=frame_botones, text="Solucionar 2", corner_radius=10, command=lambda: solucionar(2), 
+boton_solucionar2 = CTkButton(master=frame_botones, text="Soluciona VORAZ", corner_radius=10, command=lambda: solucionar(2), 
                                        fg_color="#E67E22", hover_color="#D35400")
 boton_solucionar2.pack(side="left", padx=5)
 

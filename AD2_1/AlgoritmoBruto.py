@@ -106,6 +106,7 @@ class RedSocialModeracion:
             tuple: La mejor estrategia y su nivel de extremismo.
         """
         unasEstrategias = self.generarEstrategias(self.n)
+        print("="*200) 
         laPropiaEstrategia = [[], self.calcularExtremismoRS(self.agentes), 0]
 
         for estrategia in unasEstrategias:
