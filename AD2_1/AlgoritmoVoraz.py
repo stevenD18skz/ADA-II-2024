@@ -1,8 +1,8 @@
-import  math , copy, lector
-from pprint import pprint
+import  math , copy
+from AlgoritmoDinamico import *
 
-class RedSocialModeracionVoraz:
-    def __init__(self, n_agentes, agentes, R_max):
+class modexV:
+    def __init__(self, RS):
         """
         Inicializa una instancia de RedSocialModeracion.
 
@@ -11,11 +11,9 @@ class RedSocialModeracionVoraz:
                             oRS es la opinión del agente, y rRS es su receptividad.
             R_max (int): El esfuerzo máximo permitido para la moderación.
         """
-        self.n_agentes = n_agentes
-        self.agentes = agentes  # Lista de agentes con sus opiniones y receptividad
-        self.R_max = R_max  # Esfuerzo máximo permitido
-        self.n = len(agentes)  # Número de agentes
-
+        self.n_agentes = len(RS[0])
+        self.agentes = RS[0]  # Lista de agentes con sus opiniones y receptividad
+        self.R_max = RS[1]  # Esfuerzo máximo permitido
 
 
     def calcularExtremismoRS(self, unosAgentes):
@@ -45,7 +43,7 @@ class RedSocialModeracionVoraz:
             int: El esfuerzo total necesario para aplicar la estrategia.
         """
         esfuerzo = 0
-        for i in range(self.n):
+        for i in range(self.n_agentes):
             if e[i] == 1:
                 opinion_i = abs(self.agentes[i][0])
                 receptividad_i = (1 - self.agentes[i][1])
@@ -64,30 +62,15 @@ class RedSocialModeracionVoraz:
             list: Nueva lista de agentes, donde las opiniones de los agentes moderados han sido cambiadas a 0.
         """
         nuevosAgentes = copy.deepcopy(self.agentes)
-        for i in range(self.n):
+        for i in range(self.n_agentes):
             if e[i] == 1:
                 nuevosAgentes[i][0] = 0
         return nuevosAgentes
 
 
 
-    def algoritmo_voraz(self):
+    def solucionar(self):
         # Paso 1: Crear una lista de beneficio/costo para cada agente (cuales nso conviene mas moderar)
-        self.agentes2 =  [ # array de prueba
-            [50, 0.9],   
-            [-75, 0.5], 
-            [20, 0.2],   
-            [-40, 0.8],  
-            [30, 0.3],   
-            [10, 0.3],  
-            [50, 0.3],  
-            [90, 0.3],  
-            [50, 0.1],  
-            [50, 0.5],  
-            [50, 0.9],  
-            [100, 1],  
-        ]
-
         beneficio_costo = []
         for i in range(len(self.agentes)):
             opinion_i = self.agentes[i][0]
@@ -95,8 +78,7 @@ class RedSocialModeracionVoraz:
             # Beneficio: reducción en el extremismo si la opinión es moderada a 0
             beneficio = opinion_i ** 2
             # Costo: esfuerzo de moderar la opinión, influido por la receptividad
-            costo = abs(opinion_i) * (1 - receptividad_i)
-            #print(f"{abs(opinion_i)} {receptividad_i} {(1 - receptividad_i)} {costo}")
+            costo = math.ceil(abs(opinion_i) * (1 - receptividad_i))
             ratio = beneficio / (costo if costo > 0 else 1)
             beneficio_costo.append((ratio, i, beneficio, costo))
         
@@ -117,18 +99,69 @@ class RedSocialModeracionVoraz:
         extremismo_final = self.calcularExtremismoRS(nueva_red)
 
         solucion = [estrategia, extremismo_final, esfuerzo_total]
-        #print(f"termine {solucion}")
         return solucion
 
 
-        #pprint(beneficio_costo)
-        #print("\n".join([f"Ratio: {item[0]:.2f}, Index: {item[1]}, Beneficio: {item[2]:.2f}, Costo: {item[3]:.4f}" for item in beneficio_costo]))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 """
+valores_p = [5.8, 21.557, 11.724, 15.717, 9.678, 11.481, 0, 3.652, 5.933, 2.419, 5.65, 4.037, 4.455, 4.24, 1.319, 1.727, 1.406, 3.955, 0.901, 1.406, 2.629, 1.524, 1.927, 0.973, 0.97, 0.815, 0.373, 0.786, 1.17, 0.309, 1.352,
+0.872,
+1.207,
+0.561,
+0.449,
+0.607,
+0.253,
+0.228,
+0.224,
+0.127,
+0,
+0,
+0,
+0,
+0,]
+
+#print("{:<20} | {:<12} | {:<17} | {:<10} | {:<20} | {:<10}".format("Prueba", "N. Agentes", "Valor Solución", "Solución profe", "Exfuerzo", "diferencias"))
+print(f"{"prueba":<20} | { "N.Agentes":<12} | { "Valor voraz":<17} |  { "timepo":<24} | { "Solucion profe":<10} | { "Ezfuerzo techo":<20} | { "diferencia":<10}")
+
+def floor_to_3_decimals(value):
+    return math.floor(value * 1000) / 1000
+
+def floor_to_4_decimals(value):
+    return math.floor(value * 10000) / 10000
+
+#(20, [....], 74)
+
+for i in range(1, 46):
+    n_agentes, agentes, R_max = lector.ALFile(n=i)
+    RS = [agentes, R_max]
+    solucionVoraz = RedSocialModeracionVoraz(RS)
+    start_time = time.time()
+    techo = solucionVoraz.algoritmo_voraz()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    #dina = SDinacmia(n_agentes, agentes, R_max)
+    #mejorada = dina.solucionar()#solucionVoraz.algoritmo_voraz_mejorado()
+    mejorada = [0 ,0]
+
+    print(f"{f'Prueba{i}.txt':<20} | {n_agentes:<12} | {floor_to_4_decimals(techo[1]):<17.5f} |  {elapsed_time:<24.20f} | {valores_p[i-1]:<14.3f} | {techo[2]:<20} | {"✔✔✔" if floor_to_4_decimals(valores_p[i-1] - floor_to_3_decimals(techo[1])) >= 0 else "---":<10} ==> {"   " if floor_to_4_decimals(valores_p[i-1] - floor_to_3_decimals(techo[1])) >= 0 else str((valores_p[i-1] * 100) / techo[1]) + '%'     }")
+
+
 valores_p = [5.8, 21.557, 11.724, 15.717, 9.678, 11.481, 0, 3.652, 5.933, 2.419, 5.65, 4.037, 4.455, 4.24, 1.319, 1.727, 1.406, 3.955, 0.901, 1.406, 2.629, 1.524, 1.927, 0.973, 0.97, 0.815, 0.373, 0.786, 1.17, 0.309]
 
 print("{:<12} | {:<12} | {:<17} | {:<10} | {:<10}".format("Prueba", "N. Agentes", "Valor Solución", "Solución profe", "diferencias"))
@@ -139,7 +172,7 @@ for i in range(1, 31):
     r = solucionVoraz.algoritmo_voraz()
     print("{:<12} | {:<12} | {:<17.9f} | {:<10} | {:<10}".format(f"Prueba{i}.txt", n_agentes, r[1], valores_p[i-1], 111 if valores_p[i-1] >= r[1] else 333))
 
-
+100 - 99.4 +- 98.5
 Prueba       | N. Agentes   | Valor Solución    | Solución profe | diferencias
 Prueba1.txt  | 5            | 5.800000000       | 5.8        | ✔✔✔       
 Prueba2.txt  | 5            | 21.557365331      | 21.557     | ✔✔✔       
@@ -173,3 +206,18 @@ Prueba29.txt | 2000         | 1.146792483       | 1.17       | ✔✔✔
 Prueba30.txt | 2500         | 0.233969229       | 0.309      | ✔✔✔ 
 """
 
+"""
+80 => limite
+
+voy en 76
+
+10 => 4 10/4 = ?  => 2.5
+
+6 => 2} = 11 6/2 => 3
+5 => 2} = 
+
+80
+
+
+
+"""

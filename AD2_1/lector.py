@@ -1,9 +1,7 @@
 import os
 
 
-# Abrir y leer el archivo
 def ALFile(n = 1, ruta_archivo = ""):
-
     if ruta_archivo == "":
         ruta_script = os.path.dirname(os.path.abspath(__file__))
         ruta_archivo = os.path.join(ruta_script, 'Entradas', f'Prueba{n}.txt')
@@ -20,8 +18,3 @@ def ALFile(n = 1, ruta_archivo = ""):
         R_max = int(archivo.readline().strip())
     
     return [n_agentes, agentes, R_max]
-
-"""# Mostrar los resultados
-print(f'n: {n_agentes}')
-print(f'Parejas: {agentes}')
-print(f'Último número: {R_max}')"""

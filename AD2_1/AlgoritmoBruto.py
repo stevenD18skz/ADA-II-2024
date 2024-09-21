@@ -1,7 +1,7 @@
 import  math , copy
 
-class RedSocialModeracion:
-    def __init__(self, n_agentes, agentes, R_max):
+class modexFB:
+    def __init__(self, RS):
         """
         Inicializa una instancia de RedSocialModeracion.
 
@@ -10,10 +10,9 @@ class RedSocialModeracion:
                             oRS es la opinión del agente, y rRS es su receptividad.
             R_max (int): El esfuerzo máximo permitido para la moderación.
         """
-        self.n_agentes = n_agentes
-        self.agentes = agentes  # Lista de agentes con sus opiniones y receptividad
-        self.R_max = R_max  # Esfuerzo máximo permitido
-        self.n = len(agentes)  # Número de agentes
+        self.n_agentes = len(RS[0])
+        self.agentes = RS[0]  # Lista de agentes con sus opiniones y receptividad
+        self.R_max = RS[1]  # Esfuerzo máximo permitido
 
     def generarEstrategias(self, n):
         """
@@ -62,7 +61,7 @@ class RedSocialModeracion:
             int: El esfuerzo total necesario para aplicar la estrategia.
         """
         esfuerzo = 0
-        for i in range(self.n):
+        for i in range(self.n_agentes):
             if e[i] == 1:
                 opinion_i = abs(self.agentes[i][0])
                 receptividad_i = (1 - self.agentes[i][1])
@@ -80,7 +79,7 @@ class RedSocialModeracion:
             list: Nueva lista de agentes, donde las opiniones de los agentes moderados han sido cambiadas a 0.
         """
         nuevosAgentes = copy.deepcopy(self.agentes)
-        for i in range(self.n):
+        for i in range(self.n_agentes):
             if e[i] == 1:
                 nuevosAgentes[i][0] = 0
         return nuevosAgentes
@@ -98,15 +97,17 @@ class RedSocialModeracion:
         esfuerzo = self.calcularEsfuerzo(e)
         return esfuerzo <= self.R_max
 
-    def hallarMejorEstrategia(self):
+
+
+    def solucionar(self):
         """
         Encuentra la mejor estrategia de moderación.
 
         Returns:
             tuple: La mejor estrategia y su nivel de extremismo.
         """
-        unasEstrategias = self.generarEstrategias(self.n)
-        print("="*200) 
+        unasEstrategias = self.generarEstrategias(self.n_agentes) 
+        print("=============================================================")
         laPropiaEstrategia = [[], self.calcularExtremismoRS(self.agentes), 0]
 
         for estrategia in unasEstrategias:
@@ -119,40 +120,3 @@ class RedSocialModeracion:
 
         laPropiaEstrategia[2] = self.calcularEsfuerzo(laPropiaEstrategia[0])
         return laPropiaEstrategia #estrategia, extermismoResultannte, Exfuerzo
-
-
-
-
-
-
-
-
-"""
-n, agentes, R_max = lector.ALFile()
-laPropiaEstrategia = hallarMejorEstrategia(agentes)
-
-
-
-def escribirSalida():
-    # Abrir (o crear) un archivo llamado "salida.txt" en modo escritura ('w')
-    with open('./AD2_1/salida.txt', 'w') as file:
-        # Escribir las líneas en el archivo
-        file.write(f'{laPropiaEstrategia[1]}\n')#extremismo
-        file.write(f'{laPropiaEstrategia[2]}\n')#Exfuerzo
-        list(map(lambda x: file.write(f"{x}\n"), laPropiaEstrategia[0]))# Escribir la estrategia en el archivo usando map y lambda
-
-
-
-
-
-
-print(f"                    ===> INICIALIZACION DEL PROBLEMA <===")
-print(f'n: {n}')
-print(f'Parejas: {agentes}')
-print(f'Último número: {R_max}')
-print(f'Extremismo inicial: {calcularExtremismoRS(agentes)}')
-print(f"\n\n                    ===> RESULTADOS DEL PROBLEMA <===")
-print(f'La mejor estrategia es: {laPropiaEstrategia[0]}')
-print(f'Con extremismo {laPropiaEstrategia[1]}')
-print(f'Con esfuerzo de: {calcularEsfuerzo(agentes, laPropiaEstrategia[0])} debajo de (<=) {R_max}')
-"""
