@@ -106,8 +106,7 @@ class modexFB:
         Returns:
             tuple: La mejor estrategia y su nivel de extremismo.
         """
-        unasEstrategias = self.generarEstrategias(self.n_agentes) 
-        print("=============================================================")
+        unasEstrategias = self.generarEstrategias(self.n_agentes)
         laPropiaEstrategia = [[], self.calcularExtremismoRS(self.agentes), 0]
 
         for estrategia in unasEstrategias:
