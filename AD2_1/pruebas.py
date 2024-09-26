@@ -7,6 +7,10 @@ from memory_profiler import memory_usage
 import pyperclip
 
 
+def floor_to_3_decimals(value):
+    return math.floor(value * 1000) / 1000
+
+
 def soluicion_voraz(num):
     entrada = ALFile(n=num)
     n_agentes = entrada[0]
@@ -26,27 +30,40 @@ def soluicion_Segura(num):
     return solucion, n_agentes
 
 txt = ""
-for i in range(56, 67):
+
+for i in range(56, 87):
     for x in range (1):
-        solucion = soluicion_voraz(i)
-        ex_v = solucion[0][1]
 
-        solucion_b = soluicion_Segura(i)
-        ex_b = solucion[0][1]
+        inicio = time.time()
+        voraz = soluicion_voraz(i)
+        final = time.time()
+        t = final - inicio
+        E_v = floor_to_3_decimals(voraz[0][1])
+
+        dinamica = soluicion_Segura(i)
+        E_D = floor_to_3_decimals(dinamica[0][1])
 
 
-        n_age = solucion[1]
+        n_age = voraz[1]
 
-        print(f"prueba nueva {i-55:<2}:  |  N: {n_age:<2}  |  Extremismo Voraz: {ex_v:<12.5f}  |  Extremismo Optimo: {ex_b:<12.5f}  |  {"✅✅✅" if ex_v == ex_b else "⭕⭕⭕"}")
+        print(f"prueba nueva {i:<2}:  |  N: {n_age:<2}  |  Extremismo Voraz: {E_v:<12.5f}  |  Extremismo Optimo: {E_D:<12.5f}  |  {"✅✅✅" if E_v == E_D else "⭕⭕⭕"}  |  Tiempo: {t}")
 
         #tiempo_time = timeit(lambda: medir_memoria_metodo(i), number=1)
         #print(f"{i:<3}    <========> Tiempo Final: {tiempo_time / 1:20.12f}")
 
+        
+        op = "✅✅✅" if E_v == E_D else "⭕⭕⭕"
+        
 
-        txt += f"{ex_v}	{ex_b}" + "\n"
+        txt += f"{n_age:<2}	{E_v}	{E_D}	{op}	{t}"
         pyperclip.copy(txt)
 
     txt += "\n"
+
+
+
+
+
 
 
 
@@ -60,14 +77,14 @@ def medir_memoria_metodo(num):
     
     return solucion, n_agentes
 
+[[[34, 0.5249591123887468], [-97, 0.06662575262643888], [-96, 0.9909023877685615], [-5, 0.7095964332655594], [13, 0.5730892184411239], [-77, 0.3990264318559328], [11, 0.9862096012203873], [65, 0.41386829191945196], [-27, 0.6627728079835299], [-45, 0.37708482008389566], [92, 0.12287758092115264], [-85, 0.29319887852162296], [78, 0.0033000534752198885], [-59, 0.7607528856502521], [4, 0.0647508445318502], [-47, 0.5994834265364559], [97, 0.7588520698928425], [85, 0.2251905822498278], [2, 0.2450440390223817], [-98, 0.6804499082649875]], 225]
 
-# Medir el tiempo de ejecución
 
 def floor_to_3_decimals(value):
     return math.floor(value * 1000) / 1000
 
 
-valores_p = [5.8, 21.557, 11.724, 15.717, 9.678, 11.481, 0, 3.652, 5.933, 2.419, 5.65, 4.037, 4.455, 4.24, 1.319, 1.727, 1.406, 3.955, 0.901, 1.406, 2.629, 1.524, 1.927, 0.973, 0.97, 0.815, 0.373, 0.786, 1.17, 0.309, 1.352,0.872,1.207,0.561,0.449,0.607,0.253,0.228,0.224,0.127,0,0,0,0,0]
+
 
 txt = ""
 for i in range(1, 56):
@@ -79,7 +96,7 @@ for i in range(1, 56):
 
         n_age = solucion[1]
 
-        print(f"{i:<3} {n_age:<10}  extremismo: {solucion[0][1]:15.10f} <=====> P: {valores_p[i-1]:<8}  {"✅✅✅" if floor_to_3_decimals(solucion[0][1]) <= valores_p[i-1] else "      "}    Tiempo Final: {tiempo_time:20.12f}")
+        print(f"{i:<3} {n_age:<10}  extremismo: {solucion[0][1]:15.10f}")
 
         #tiempo_time = timeit(lambda: medir_memoria_metodo(i), number=1)
         #print(f"{i:<3}    <========> Tiempo Final: {tiempo_time / 1:20.12f}")
@@ -92,23 +109,5 @@ for i in range(1, 56):
 
     txt += "\n"
 
-
-
-con el for normal
-55     <========> Tiempo Final:      13.484519300000
-55     <========> Tiempo Final:      13.277457200002
-55     <========> Tiempo Final:      12.741125400000
-55     <========> Tiempo Final:      13.329942600001
-55     <========> Tiempo Final:      13.642960400000
-
-55     <========> Tiempo Final:      12.287298299998
-55     <========> Tiempo Final:      12.189783600003
-55     <========> Tiempo Final:      12.967816699998
-55     <========> Tiempo Final:      12.802010600000
-55     <========> Tiempo Final:      12.731625500001
-
-55     <========> Tiempo Final:      12.558544500000
-55     <========> Tiempo Final:      12.957750599999
-55     <========> Tiempo Final:      11.957949800002
 
 """

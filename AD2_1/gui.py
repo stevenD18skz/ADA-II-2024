@@ -16,6 +16,7 @@ class GUI:
         self.dinamica = None
         self.ventana = None
         self.entrada_texto = None
+        self.nombre_archivo_label = None
         self.salida_texto = None
         self.estado_label = None
 
@@ -33,6 +34,9 @@ class GUI:
             with open(file_path, 'r') as f:
                 self.entrada_texto.delete(1.0, tk.END)  # Limpiar el área de texto
                 self.entrada_texto.insert(tk.END, f.read())  # Cargar el contenido
+
+            # Actualizar la etiqueta con el nombre del archivo
+            self.nombre_archivo_label.config(text=f"Archivo cargado: {os.path.basename(file_path)}")
             
             n_agentes, agentes, R_max = lector.ALFile(ruta_archivo=file_path)
             RS = (agentes, R_max)
@@ -109,10 +113,15 @@ class GUI:
         self.entrada_texto = tk.Text(frame, height=20, width=30, wrap="word", bg="#ECF0F1", fg="#2C3E50", font=("Arial", 12))
         self.entrada_texto.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
+        # Etiqueta para mostrar el nombre del archivo cargado
+        self.nombre_archivo_label = tk.Label(frame, text="Ningún archivo cargado", font=("Arial", 10), bg="#2C3E50", fg="white")
+        self.nombre_archivo_label.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
+
+
         # Botón para cargar archivo
         boton_cargar = CTkButton(master=frame, text="Cargar Archivo", corner_radius=10, command=self.cargar_archivo,
                                 fg_color="#3498DB", hover_color="#2980B9")
-        boton_cargar.grid(row=1, column=0, padx=10, pady=10)
+        boton_cargar.grid(row=2, column=0, padx=10, pady=10)
 
         # Botones de solución
         frame_botones = tk.Frame(frame, bg="#2C3E50")

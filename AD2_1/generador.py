@@ -31,9 +31,20 @@ def generate(n):
     return result
 
 
+lista_numeros = list(range(56, 67))
+print(lista_numeros)
 
 
-for i in range(15,26):
-    guardar_solucion(i+41, generate(i))
+indice = list(range(56, 100))
+
+n = 100
+s = 200
+f = (30*s)
+
+acc = 0
+
+for i in range(n,f+s+n, s):
+    guardar_solucion(indice[acc], generate(i))
+    acc += 1
 
 

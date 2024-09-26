@@ -15,6 +15,7 @@ class modexV:
         self.n_agentes = len(RS[0])
         self.agentes = RS[0]  # Lista de agentes con sus opiniones y receptividad
         self.R_max = RS[1]  # Esfuerzo máximo permitido
+        
 
 
     def calcularExtremismoRS(self, unosAgentes):
@@ -89,8 +90,7 @@ class modexV:
         estrategia = [0] * len(self.agentes)
 
         # Calcular la suma de los cuadrados de las opiniones al inicio
-        suma = 0 
-
+        suma = 0
         for ratio, i, beneficio, costo in beneficio_costo:
             if esfuerzo_total + costo <= self.R_max:
                 estrategia[i] = 1
@@ -98,6 +98,25 @@ class modexV:
 
             else:
                 suma += beneficio
+
+         
+        # Segunda fase: Reconsiderar agentes con opiniones extremas (que no fueron seleccionados)
+        for ratio, i, beneficio, costo in beneficio_costo:
+            if estrategia[i] == 0 and beneficio > suma:  # Si no fue moderado y su beneficio supera lo no moderado
+                # Intentar reemplazar agentes moderados de menor impacto
+                for ratio2, j, beneficio2, costo2 in beneficio_costo:
+                    if estrategia[j] == 1 and costo2 >= costo and beneficio2 < beneficio:
+                        # Reemplazar el agente j por el agente i
+                        estrategia[j] = 0  # Desmoderamos al agente j
+                        esfuerzo_total -= costo2
+                        suma -= beneficio2  # Quitamos su beneficio
+                        
+                        estrategia[i] = 1  # Moderamos al agente i
+                        esfuerzo_total += costo
+                        suma += beneficio  # Añadimos su beneficio
+                        break  # Solo hacemos un reemplazo por iteración de este agente
+       
+
 
 
         # Paso 4: Calcular el extremismo final usando la suma ajustada de cuadrados
