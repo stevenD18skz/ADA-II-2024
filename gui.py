@@ -4,7 +4,7 @@ from customtkinter import *
 import os
 import time
 
-import lector
+import lector as lector
 from AlgoritmoBruto import *
 from AlgoritmoVoraz import *
 from AlgoritmoDinamico import *
