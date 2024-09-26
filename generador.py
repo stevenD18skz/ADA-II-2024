@@ -7,10 +7,6 @@ def guardar_solucion(n, solucion_outPut):
     ruta_script = os.path.dirname(os.path.abspath(__file__))
     ruta_archivo = os.path.join(ruta_script[:45], 'Entradas', f'Prueba{n}.txt')
 
-    print(ruta_archivo)
-
-    #ruta = "c:\Users\braya\Desktop\PRY\ADA-II-2024\AD2_1\nuevas\Prueba56.txt"
-
     with open(ruta_archivo, 'w') as file:
         file.write(solucion_outPut)
 
