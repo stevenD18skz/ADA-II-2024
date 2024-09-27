@@ -64,7 +64,7 @@ class modexPD:
             if (e[i] == 1):
                 opinion_i = abs(unosAgentes[i][0])
                 receptividad_i = (1 - unosAgentes[i][1])
-                esfuerzo += math.ceil(opinion_i * receptividad_i)
+                esfuerzo += math.ceil(opinion_i*receptividad_i)
         return esfuerzo
 
     def calcularExtremismoRS(self, unosAgentes):
@@ -83,23 +83,8 @@ class modexPD:
             suma += math.pow(opinion_i, 2)
         raiz = math.pow(suma, 1/2)
         return raiz / self.n_agentes
+    
 
-    def calcularExtremismoRS2(self, unosAgentes):
-        """
-        Similar a `calcularExtremismoRS` pero omite el primer agente.
-
-        Args:
-            unosAgentes (list): Lista de agentes con sus opiniones.
-
-        Returns:
-            float: El nivel de extremismo en la red social (omitiendo al primer agente).
-        """
-        suma = 0
-        for i in range(1, self.n_agentes):
-            opinion_i = unosAgentes[i][0]
-            suma += math.pow(opinion_i, 2)
-        raiz = math.pow(suma, 1/2)
-        return raiz / self.n_agentes
 
     def generarNuevaRS(self, unosAgentes, e):
         """
@@ -119,6 +104,15 @@ class modexPD:
                 nuevosAgentes[i][0] = 0
         return nuevosAgentes
 
+
+
+
+    def calcularEsfuerzoAgente(self, unAgente):
+        opinion = abs(unAgente[0])
+        receptividad = abs(unAgente[1])
+        return math.ceil(opinion * (1 - receptividad))
+
+
     def solucionar(self):
         """
         Implementa el algoritmo de mochila 0-1 para encontrar la mejor combinación
@@ -129,45 +123,41 @@ class modexPD:
             list: La solución binaria que indica qué agentes moderar (1) o no (0),
                   el nuevo nivel de extremismo, y el esfuerzo total utilizado.
         """
+        # Guardamos el extremismo de la RS actual para comparar luego
         extremismoInicial = self.calcularExtremismoRS(self.agentes)
 
-        def calcularEsfuerzoAgente(unAgente):
-            opinion = abs(unAgente[0])
-            receptividad = abs(unAgente[1])
-            return math.ceil(opinion * (1 - receptividad))
-
-        W = self.R_max
         solucion = [0 for _ in range(self.n_agentes)]
-        V = [[0 for _ in range(W+1)] for _ in range(self.n_agentes+1)]
 
-        for w in range(W):
-            V[0][w] = 0
+        if self.R_max < self.n_agentes*100:
+            V = [[0 for _ in range(self.R_max + 1)] for _ in range(self.n_agentes + 1)]
 
-        for i in range(1, self.n_agentes):
-            V[i][0] = 0
+            for w in range(self.R_max):
+                V[0][w] = 0
+            for i in range(1, self.n_agentes):
+                V[i][0] = 0
+            for i in range(1, self.n_agentes + 1):
+                for w in range(self.R_max + 1):
+                    pesoAgente_i = self.calcularEsfuerzoAgente(self.agentes[i-1])
+                    if pesoAgente_i <= w:
+                        beneficioModerarAgente = pow(self.agentes[i-1][0], 2)
+                        V[i][w] = max(V[i-1][w], beneficioModerarAgente + V[i-1][w-pesoAgente_i])
+                    else:
+                        V[i][w] = V[i-1][w]
 
-        for i in range(1, self.n_agentes+1):
-            for w in range(W+1):
-                pesoAgente_i = calcularEsfuerzoAgente(self.agentes[i-1])
-                if pesoAgente_i <= w:
-                    beneficioModerarAgente = pow(self.agentes[i-1][0], 2)
-                    V[i][w] = max(beneficioModerarAgente + V[i-1][w-pesoAgente_i], V[i-1][w])
-                else:
-                    V[i][w] = V[i-1][w]
+            i = self.n_agentes
+            k = self.R_max
 
-        i = self.n_agentes
-        k = W
-
-        while (i > 0 and k > 0):
-            if V[i][k] != V[i-1][k]:
-                solucion[i-1] = 1
-                i = i-1
-                k = k-calcularEsfuerzoAgente(self.agentes[i])
-            else:
-                i = i-1
+            while (i > 0 and k > 0):
+                if V[i][k] != V[i-1][k]:
+                    solucion[i-1] = 1
+                    k -= self.calcularEsfuerzoAgente(self.agentes[i-1])
+                i -= 1
+        else:
+            # Si tenemos el R_max suficiente, moderamos toda la RS sin importar las opiniones
+            solucion = [1 for _ in range(self.n_agentes)]
 
         nuevaRS = self.generarNuevaRS(self.agentes, solucion)
         nuevoExtremismo = self.calcularExtremismoRS(nuevaRS)
         esfuerzoEstrategia = self.calcularEsfuerzo(self.agentes, solucion)
-        
+
         return [solucion, nuevoExtremismo, esfuerzoEstrategia]

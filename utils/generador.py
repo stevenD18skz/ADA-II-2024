@@ -5,7 +5,7 @@ import pyperclip
 
 def guardar_solucion(n, solucion_outPut):
     ruta_script = os.path.dirname(os.path.abspath(__file__))
-    ruta_archivo = os.path.join(ruta_script[:45], 'Entradas', f'Prueba{n}.txt')
+    ruta_archivo = os.path.join(ruta_script[:45], f'Prueba{n}.txt')
 
     with open(ruta_archivo, 'w') as file:
         file.write(solucion_outPut)
@@ -27,6 +27,10 @@ def generate(n):
     return result
 
 
+
+
+guardar_solucion(1, generate(5000))
+quit()
 lista_numeros = list(range(56, 67))
 print(lista_numeros)
 

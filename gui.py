@@ -81,7 +81,7 @@ class GUI:
         self.guardar_solucion(solucion_outPut)
 
     def guardar_solucion(self, solucion_outPut):
-        with open('./AD2_1/salida.txt', 'w') as file:
+        with open('./salida.txt', 'w') as file:
             file.write(solucion_outPut)
 
         messagebox.showinfo("Éxito", "Solución guardada correctamente.")
