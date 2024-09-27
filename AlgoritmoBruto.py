@@ -10,9 +10,11 @@ class modexFB:
                             oRS es la opinión del agente, y rRS es su receptividad.
             R_max (int): El esfuerzo máximo permitido para la moderación.
         """
-        self.n_agentes = len(RS[0])
+        self.n_agentes = len(RS[0]) #numero total de agentes en la red social
         self.agentes = RS[0]  # Lista de agentes con sus opiniones y receptividad
         self.R_max = RS[1]  # Esfuerzo máximo permitido
+
+
 
     def generarEstrategias(self, n):
         """
@@ -36,6 +38,8 @@ class modexFB:
 
         return generarEstrategia([], n)
 
+
+
     def calcularExtremismoRS(self, unosAgentes):
         """
         Calcula el nivel de extremismo de una red social.
@@ -49,6 +53,8 @@ class modexFB:
         suma = sum(list(map(lambda x: math.pow(x[0], 2), unosAgentes)))
         raiz = math.pow(suma, 1/2)
         return raiz / len(unosAgentes)
+
+
 
     def calcularEsfuerzo(self, e):
         """
@@ -68,6 +74,8 @@ class modexFB:
                 esfuerzo += math.ceil(opinion_i * receptividad_i)
         return esfuerzo
 
+
+
     def generarNuevaRS(self, e):
         """
         Genera una nueva red social a partir de la red original aplicando una estrategia de moderación.
@@ -83,6 +91,8 @@ class modexFB:
             if e[i] == 1:
                 nuevosAgentes[i][0] = 0
         return nuevosAgentes
+
+
 
     def esEstrategiaAplicable(self, e):
         """

@@ -34,7 +34,6 @@ class modexPD:
             agentes a moderar con el fin de minimizar el extremismo, considerando el esfuerzo 
             máximo permitido.
     """
-
     def __init__(self, RS):
         """
         Inicializa una instancia de RedSocialModeracion.
@@ -47,6 +46,8 @@ class modexPD:
         self.n_agentes = len(RS[0])
         self.agentes = RS[0]  # Lista de agentes con sus opiniones y receptividad
         self.R_max = RS[1]  # Esfuerzo máximo permitido
+
+
 
     def calcularEsfuerzo(self, unosAgentes, e):
         """
@@ -67,6 +68,8 @@ class modexPD:
                 esfuerzo += math.ceil(opinion_i*receptividad_i)
         return esfuerzo
 
+
+
     def calcularExtremismoRS(self, unosAgentes):
         """
         Calcula el nivel de extremismo de una red social dada.
@@ -83,7 +86,7 @@ class modexPD:
             suma += math.pow(opinion_i, 2)
         raiz = math.pow(suma, 1/2)
         return raiz / self.n_agentes
-    
+
 
 
     def generarNuevaRS(self, unosAgentes, e):
@@ -106,11 +109,24 @@ class modexPD:
 
 
 
-
     def calcularEsfuerzoAgente(self, unAgente):
+        """
+        Calcula el esfuerzo de un agente basado en su opinión y receptividad.
+
+        Args:
+            unAgente (list): Lista que contiene la opinión y la receptividad del agente.
+                            unAgente[0] es la opinión (un valor entre -1 y 1).
+                            unAgente[1] es la receptividad (un valor entre 0 y 1).
+
+        Returns:
+            int: Esfuerzo del agente, calculado como el valor absoluto de la opinión 
+                multiplicado por (1 - receptividad), redondeado al entero superior.
+        """
         opinion = abs(unAgente[0])
         receptividad = abs(unAgente[1])
         return math.ceil(opinion * (1 - receptividad))
+
+
 
 
     def solucionar(self):
