@@ -54,9 +54,6 @@ class modexV:
         # Ordena los agentes por su ratio beneficio/costo de mayor a menor
         beneficio_costo.sort(reverse=True, key=lambda x: x[0])
 
-        print(self.agentes)
-        print(beneficio_costo)
-
         esfuerzo_total = 0  # Esfuerzo acumulado en la moderación
         estrategia = [0] * len(self.agentes)  # Estrategia inicial: ningún agente está moderado
 
